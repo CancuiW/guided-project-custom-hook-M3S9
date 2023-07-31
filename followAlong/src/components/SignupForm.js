@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 
 import Button from "../theme/Button";
+import { useForm } from "../hooks/useForm";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -21,23 +22,24 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const initialValue = { username: localStorage.getItem('username') ? localStorage.getItem('username'):"",
+                       email:localStorage.getItem("email")?localStorage.getItem('email'):"" }
 export default function SignupForm() {
   const classes = useStyles();
-  const [firstName, setFirstName] = useState("");
-
-  const handleChanges = e => {
-    setFirstName(e.target.value);
+  //callBack must be defined before 'handleSubmit',because 
+  //'handleSubmit' function contains callBack function
+  const callBack = () => {
+    alert(`${values.username},${values.email}`);
   };
+  //this form state is to store everything in the form as an object
+  const [values, handleChanges, clearForm,handleSubmit]=useForm('sign-in',initialValue,callBack)
+  
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    alert(firstName);
-  };
+  
 
-  const clearForm = e => {
-    e.preventDefault();
-    setFirstName("");
-  };
+ 
+
+  
 
   return (
     <div p={2} className="form">
@@ -45,11 +47,21 @@ export default function SignupForm() {
         <fieldset>
           <legend>Add New Client</legend>
           <TextField
-            id="outlined-name"
-            label="First Name"
+            //id="outlined-name"
+            label="User Name"
             className={classes.textField}
-            name="firstName"
-            value={firstName}
+            name='username'
+            value={values.username}
+            onChange={handleChanges}
+            margin="normal"
+            variant="outlined"
+          />
+          <TextField
+            //id="outlined-name"
+            label="Email"
+            className={classes.textField}
+            name='email'
+            value={values.email}
             onChange={handleChanges}
             margin="normal"
             variant="outlined"
